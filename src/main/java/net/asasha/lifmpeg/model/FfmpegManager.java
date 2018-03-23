@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- *
+ * Video manager
  */
 public class FfmpegManager implements VideoManager {
 
@@ -15,7 +15,6 @@ public class FfmpegManager implements VideoManager {
         String command = "cmd /c start /min ffmpeg -y -f concat -i \"%s\" -c copy \"%s\"";
         execute(command, in, out);
     }
-
 
     @Override
     public void createAnImage(String in, String time, String out) {
