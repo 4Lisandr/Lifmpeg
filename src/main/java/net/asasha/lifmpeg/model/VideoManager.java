@@ -4,6 +4,6 @@ public interface VideoManager {
 
     void concat(String in, String out);
 
-    void createImage(String in, String time, String out);
+    void createAnImage(String in, String time, String out);
 
 }
