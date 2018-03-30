@@ -85,7 +85,7 @@ public class TimeCode {
 
     private int seconds(boolean round) {
         return round
-                ? Math.round(milliSeconds / 1000)
+                ? Math.round(milliSeconds / 1000f)
                 : milliSeconds / 1000;
     }
 
