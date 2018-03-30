@@ -9,13 +9,17 @@ import java.util.ArrayList;
  */
 public class PartOfVideo {
     private static int counter = 0;
+
     private static ArrayList <PartOfVideo> allParts = new ArrayList<>();
 
     private final int id;
 
-    private String name = "";
-    private TimeCode start;
+
+    private final TimeCode start;
+
+
     private TimeCode end;
+    private String name = "";
     private boolean isRemain = true;
 
     //todo - private ArrayList <String> descriptionLines;
@@ -48,6 +52,26 @@ public class PartOfVideo {
         this.end = end;
     }
 
+    /*
+    * get all parts and set borders for render
+    * */
+    public static ArrayList<PartOfVideo> getAllParts() {
+        if (allParts.size()==0)
+            return allParts;
+
+        PartOfVideo previousPart = allParts.get(0);
+
+        for (int i = 1; i < allParts.size(); i++) {
+            PartOfVideo current = allParts.get(i);
+            previousPart.setEnd(current.getStart());
+            previousPart = current;
+        }
+
+        return allParts;
+    }
+
+
+
     private void setDefaultName() {
         name = "Part_"+id;
     }
@@ -56,13 +80,16 @@ public class PartOfVideo {
         this.name = name;
     }
 
-    public void setStart(TimeCode start) {
-        this.start = start;
-    }
-
     public void setEnd(TimeCode end) {
         this.end = end;
     }
 
+    public TimeCode getStart() {
+        return start;
+    }
+
+    public TimeCode getEnd() {
+        return end;
+    }
 
 }
