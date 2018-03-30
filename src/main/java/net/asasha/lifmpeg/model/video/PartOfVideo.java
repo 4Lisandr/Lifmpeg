@@ -24,6 +24,28 @@ public class PartOfVideo {
         id = counter++;
         setDefaultName();
         this.start = start;
+        allParts.add(this);
+    }
+
+    // not all parts of videos remains
+    public PartOfVideo(TimeCode start, boolean isRemain) {
+        this(start);
+        this.isRemain = false;
+    }
+
+    public PartOfVideo(TimeCode start, TimeCode end, boolean isRemain) {
+        this(start, isRemain);
+        this.end = end;
+    }
+
+    public PartOfVideo(String name, TimeCode start) {
+        this(start);
+        this.name = name;
+    }
+
+    public PartOfVideo(String name, TimeCode start, TimeCode end) {
+        this(name, start);
+        this.end = end;
     }
 
     private void setDefaultName() {
