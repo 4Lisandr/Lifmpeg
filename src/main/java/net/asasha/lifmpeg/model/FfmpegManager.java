@@ -17,6 +17,14 @@ public class FfmpegManager implements VideoManager {
     }
 
     @Override
+    // ffmpeg -i %PREFIX% -ss %FROM% -to %TO% -c:v copy -c:a copy OUT\%OUT%
+    public void copy(String source, String from, String to, String destination) {
+        String command =
+                "cmd /c start /min ffmpeg -y -f concat -i \"%s\" -ss \"%s\" -to \"%s\" -c:v copy -c:a copy \"%s\"";
+        execute(command, source, from, to, destination);
+    }
+
+    @Override
     public void createAnImage(String in, String time, String out) {
         //  ffmpeg -i input.flv -ss 00:00:14.435 -vframes 1 out.png
 
