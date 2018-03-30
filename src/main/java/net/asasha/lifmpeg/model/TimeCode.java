@@ -39,7 +39,7 @@ public class TimeCode {
 
         if (code.contains(COLON)) {
             separator = COLON;
-        } else if (code.contains("-")) {
+        } else if (code.contains(DASH)) {
             separator = DASH;
         } else if (code.contains(" ")) {
             separator = SPACE;
@@ -47,43 +47,47 @@ public class TimeCode {
 
         if (!separator.isEmpty()) {
             String[] all = code.split(separator);
-            milliSeconds = 1000 * (int)Float.parseFloat(all[all.length - 1]);
+            milliSeconds = (int)(1000 * Double.parseDouble(all[all.length - 1]));
 
             for (int i = all.length - 2, shift = 60; i >= 0; i--, shift *= 60) {
                 if (!all[i].isEmpty()) {
-                    milliSeconds += 1000* Integer.parseInt(all[i].trim()) * shift;
+                    milliSeconds += 1000 * Integer.parseInt(all[i].trim()) * shift;
                 }
             }
         } else {
-            milliSeconds = code.isEmpty() ? 0 : 1000 * (int)Float.parseFloat(code);
+            milliSeconds = code.isEmpty() ? 0 : (int) (1000* Double.parseDouble(code));
         }
+
         return milliSeconds;
 
     }
 
     public String calcUserCode() {
-        return String.format("%d:%d:%d", hours(true),minutes(true)%60,seconds(true)%60);
+//        System.out.println("Usercode for "+
+//                String.format("%d:%d:%d", hours(true), minutes(true), seconds(true)));
+        return String.format("%d:%d:%d", hours(true), minutes(true) % 60, seconds(true) % 60);
     }
 
     public String calcExactCode() {
-        return String.format("%d:%d:%d.%d", hours(false),minutes(false)%60,
-                seconds(false)%60, seconds(false)%1000);
+//        System.out.println("Exact for "+
+//                String.format("%d:%d:%d.%d", hours(false), minutes(false), seconds(false), milliSeconds));
+        return String.format("%d:%d:%d.%d", hours(false), minutes(false) % 60,
+                seconds(false) % 60, milliSeconds % 1000);
     }
 
     private int hours(boolean round) {
-        return minutes(round)/60;
+        return minutes(round) / 60;
     }
 
     private int minutes(boolean round) {
-        return seconds(round)/60;
+        return seconds(round) / 60;
     }
 
     private int seconds(boolean round) {
         return round
                 ? Math.round(milliSeconds / 1000)
-                : milliSeconds/1000;
+                : milliSeconds / 1000;
     }
-
 
 
 }
