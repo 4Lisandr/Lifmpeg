@@ -7,8 +7,12 @@ import net.asasha.lifmpeg.model.TimeCode;
  */
 public class Marker {
     private TimeCode timeCode;
+    // optional fields
+    private String name;
     private String description;
     private boolean isTerminator;
+    private boolean isPause;
+    private boolean isEnd;
 
 
     public Marker(TimeCode timeCode) {
@@ -19,23 +23,48 @@ public class Marker {
         return timeCode;
     }
 
-    public void setTimeCode(TimeCode timeCode) {
-        this.timeCode = timeCode;
+    public String getName() {
+        return name;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public boolean isTerminator() {
         return isTerminator;
     }
 
+    public boolean isPause() {
+        return isPause;
+    }
+
+    public boolean isEnd() {
+        return isEnd;
+    }
+
+
+    public void setTimeCode(TimeCode timeCode) {
+        this.timeCode = timeCode;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void setTerminator(boolean terminator) {
         isTerminator = terminator;
+    }
+
+    public void setPause(boolean pause) {
+        isPause = pause;
+    }
+
+    public void setEnd(boolean end) {
+        isEnd = end;
     }
 }
