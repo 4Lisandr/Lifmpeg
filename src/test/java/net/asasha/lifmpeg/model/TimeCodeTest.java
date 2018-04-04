@@ -1,5 +1,7 @@
 package net.asasha.lifmpeg.model;
 
+import net.asasha.lifmpeg.model.video.TimeCode;
+
 /**
  *
  */

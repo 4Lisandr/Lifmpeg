@@ -1,4 +1,4 @@
-package net.asasha.lifmpeg.model;
+package net.asasha.lifmpeg.model.video;
 
 public class TimeCode implements Comparable {
 

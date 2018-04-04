@@ -1,7 +1,5 @@
 package net.asasha.lifmpeg.model.video;
 
-import net.asasha.lifmpeg.model.TimeCode;
-
 /**
  * Marker on video stream (timeline)
  */
