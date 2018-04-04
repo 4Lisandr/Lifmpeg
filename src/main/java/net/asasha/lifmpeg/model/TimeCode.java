@@ -1,6 +1,6 @@
 package net.asasha.lifmpeg.model;
 
-public class TimeCode {
+public class TimeCode implements Comparable {
 
     public static final String FULL_FORMAT = "%02d:%02d:%02d.%03d";
     public static final String SHORT_FORMAT = "%02d:%02d:%02d";
@@ -91,6 +91,32 @@ public class TimeCode {
         return round
                 ? Math.round(milliSeconds / 1000f)
                 : milliSeconds / 1000;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (! (o instanceof TimeCode))
+            return 0;
+
+        TimeCode timeCode = (TimeCode) o;
+        int result = milliSeconds - timeCode.milliSeconds;
+
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TimeCode timeCode = (TimeCode) o;
+
+        return milliSeconds == timeCode.milliSeconds;
+    }
+
+    @Override
+    public int hashCode() {
+        return milliSeconds;
     }
 
 }
