@@ -32,7 +32,8 @@ public class XmlExportTimeCodes {
             int x = Integer.parseInt(s);
             if (x > 0){
                 frames.add(x);
-                System.out.println(new TimeCode(x*30));
+                TimeCode t =  new TimeCode((1000*x)/30);
+                System.out.println(x +"\t"+ t+"\t"+t.toShortString());
             }
         }
 

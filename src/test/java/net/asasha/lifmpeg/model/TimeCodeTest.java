@@ -10,7 +10,7 @@ public class TimeCodeTest {
     public static void main(String[] args) {
 
         TimeCode[] timeCodes = {
-                new TimeCode(""),
+                new TimeCode((int) (1000*6649/30)),
                 new TimeCode(" 00:58:00.489 "),
                 new TimeCode(92345555),
                 new TimeCode(Integer.MAX_VALUE),
