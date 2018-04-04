@@ -2,19 +2,18 @@ package net.asasha.lifmpeg.model;
 
 public class TimeCode {
 
-    public static final String START = "00:00:00.000";
-
-    // 00:09:28.567
-    private String exactCode;
-    // 568.567
-    private int milliSeconds;
-    // 00:09:29
-    private String userCode;
+    public static final String FULL_FORMAT = "%02d:%02d:%02d.%03d";
+    public static final String SHORT_FORMAT = "%02d:%02d:%02d";
 
     public static final String COLON = ":";
     public static final String DASH = "-";
     public static final String SPACE = " ";
 
+    private int milliSeconds;
+
+    public TimeCode(int milliSeconds) {
+        this.milliSeconds = milliSeconds;
+    }
     /**
      * Any string, contains hh:mm:ss.ms with any separator like hh-mm-ss.ms or hh mm ss.ms
      */
@@ -31,7 +30,7 @@ public class TimeCode {
     * 28.367 --> 00:00:28.367
     * .367 --> 00:00:00.367
     * */
-    public int parseCode(String timeCode) {
+    private int parseCode(String timeCode) {
         int milliSeconds = 0;
 
         String code = timeCode.trim();
@@ -62,17 +61,22 @@ public class TimeCode {
 
     }
 
-    public String calcUserCode() {
-//        System.out.println("Usercode for "+
-//                String.format("%d:%d:%d", hours(true), minutes(true), seconds(true)));
-        return String.format("%d:%d:%d", hours(true), minutes(true) % 60, seconds(true) % 60);
+    //00:09:28.567
+    @Override
+    public String toString() {
+        return String.format(FULL_FORMAT,
+                hours(false),
+                minutes(false) % 60,
+                seconds(false) % 60,
+                milliSeconds % 1000);
     }
 
-    public String calcExactCode() {
-//        System.out.println("Exact for "+
-//                String.format("%d:%d:%d.%d", hours(false), minutes(false), seconds(false), milliSeconds));
-        return String.format("%d:%d:%d.%d", hours(false), minutes(false) % 60,
-                seconds(false) % 60, milliSeconds % 1000);
+    // 00:09:29
+    public String toShortString() {
+        return String.format(SHORT_FORMAT,
+                hours(true),
+                minutes(true) % 60,
+                seconds(true) % 60);
     }
 
     private int hours(boolean round) {
@@ -88,6 +92,5 @@ public class TimeCode {
                 ? Math.round(milliSeconds / 1000f)
                 : milliSeconds / 1000;
     }
-
 
 }
