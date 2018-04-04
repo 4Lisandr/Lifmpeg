@@ -11,6 +11,7 @@ public class TimeCode implements Comparable {
 
     private int milliSeconds;
 
+
     public TimeCode(int milliSeconds) {
         this.milliSeconds = milliSeconds;
     }
@@ -59,6 +60,14 @@ public class TimeCode implements Comparable {
 
         return milliSeconds;
 
+    }
+
+    public void setMilliSeconds(int milliSeconds) {
+        this.milliSeconds = milliSeconds;
+    }
+
+    public int getMilliSeconds() {
+        return milliSeconds;
     }
 
     //00:09:28.567
