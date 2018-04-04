@@ -28,11 +28,12 @@ public class XMLReaderDOM {
             Document doc = dBuilder.parse(xmlFile);
             doc.getDocumentElement().normalize();
             System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-            NodeList nodeList = doc.getElementsByTagName("sequence id=\"Sequence 1\"");
+            NodeList nodeList = doc.getElementsByTagName("sequence");
             //now XML is loaded as Document in memory, lets convert it to Object List
             List<String> frames = new ArrayList<String>();
             for (int i = 0; i < nodeList.getLength(); i++) {
                 frames.add(getFrame(nodeList.item(i)));
+                System.out.println(i);
             }
             //lets print Employee list information
             for (String frame : frames) {
@@ -51,7 +52,7 @@ public class XMLReaderDOM {
         String frame = "";
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
-            frame = getTagValue("marker", element);
+            frame = getTagValue("in", element);
         }
         return frame;
     }
