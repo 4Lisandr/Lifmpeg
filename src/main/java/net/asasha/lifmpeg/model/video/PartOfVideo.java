@@ -4,19 +4,14 @@ import net.asasha.lifmpeg.model.TimeCode;
 
 import java.util.ArrayList;
 
-/**
- * Part of video in current video file
- */
 public class PartOfVideo {
     private static int counter = 0;
 
-    private static ArrayList <PartOfVideo> allParts = new ArrayList<>();
+    private static ArrayList<PartOfVideo> allParts = new ArrayList<>();
 
     private final int id;
 
-
     private final TimeCode start;
-
 
     private TimeCode end;
     private String name = "";
@@ -24,6 +19,10 @@ public class PartOfVideo {
 
     //todo - private ArrayList <String> descriptionLines;
 
+    /**
+     * 
+     * @param start
+     */
     public PartOfVideo(TimeCode start) {
         id = counter++;
         setDefaultName();
@@ -56,7 +55,7 @@ public class PartOfVideo {
     * get all parts and set borders for render
     * */
     public static ArrayList<PartOfVideo> getAllParts() {
-        if (allParts.size()==0)
+        if (allParts.size() == 0)
             return allParts;
 
         PartOfVideo previousPart = allParts.get(0);
@@ -71,9 +70,8 @@ public class PartOfVideo {
     }
 
 
-
     private void setDefaultName() {
-        name = "Part_"+id;
+        name = "Part_" + id;
     }
 
     public void setName(String name) {

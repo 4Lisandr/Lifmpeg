@@ -9,10 +9,5 @@ public class CmdEditor extends FfmpegManager implements AdvancedVideoManager {
 
     }
 
-    class PartOfVideo {
-        int number;
-        String Name;
-        TimeCode begin, end;
 
-    }
 }
