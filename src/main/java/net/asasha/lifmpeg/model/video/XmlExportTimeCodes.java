@@ -17,35 +17,42 @@ public class XmlExportTimeCodes {
     DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
             .newInstance();
     DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-    Document document = documentBuilder.parse(new File(INBOX_XML));
 
 
     public XmlExportTimeCodes() throws ParserConfigurationException, IOException, SAXException {
-        String duration = document.getElementsByTagName("duration").item(0).getTextContent();
-        String timebase = document.getElementsByTagName("timebase").item(0).getTextContent();
-//        String in = document.getElementsByTagName("in").item(0).getTextContent();
+        Document document = documentBuilder.parse(new File(INBOX_XML));
+
+        int duration = tagToInt(document, "duration", 0);
+        int timebase = tagToInt(document, "timebase", 0);
+
         NodeList list = document.getElementsByTagName("in");
         ArrayList<Integer> frames = new ArrayList<Integer>();
 
         for (int i = 0; i < list.getLength() ; i++) {
-            String s = document.getElementsByTagName("in").item(i).getTextContent();
-            int x = Integer.parseInt(s);
+            int x = tagToInt(document, "in", i);
             if (x > 0){
                 frames.add(x);
-                TimeCode t =  new TimeCode((1000*x)/30);
+                TimeCode t =  new TimeCode(calcMSecOfFrames(x, timebase));
                 System.out.println(x +"\t"+ t+"\t"+t.toShortString());
             }
         }
 
-        System.out.println(duration);
-        System.out.println(timebase);
+        System.out.println(duration+"\t "+timebase);
 
-        int length = (1000*Integer.parseInt(duration))/
-                Integer.parseInt(timebase);
+        int length = calcMSecOfFrames(duration, timebase);
         System.out.println(new TimeCode(length).toString());
         System.out.println(new TimeCode(length).toShortString());
 
 
+    }
+
+    private int calcMSecOfFrames(int duration, int timebase) {
+        return Math.round ((1000* duration)/timebase*1f);
+    }
+
+    private int tagToInt(Document document, String tagname, int index) {
+        String s = document.getElementsByTagName(tagname).item(index).getTextContent();
+        return Integer.parseInt(s);
     }
 
     public static void main(String[] args) {
