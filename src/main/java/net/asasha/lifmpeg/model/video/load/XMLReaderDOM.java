@@ -1,4 +1,4 @@
-package net.asasha.lifmpeg.model.video;
+package net.asasha.lifmpeg.model.video.load;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

@@ -9,7 +9,7 @@ public class TimeCode implements Comparable {
     public static final String DASH = "-";
     public static final String SPACE = " ";
 
-    private int milliSeconds;
+    private final int milliSeconds;
 
 
     public TimeCode(int milliSeconds) {
@@ -60,14 +60,6 @@ public class TimeCode implements Comparable {
 
         return milliSeconds;
 
-    }
-
-    public void setMilliSeconds(int milliSeconds) {
-        this.milliSeconds = milliSeconds;
-    }
-
-    public int getMilliSeconds() {
-        return milliSeconds;
     }
 
     //00:09:28.567

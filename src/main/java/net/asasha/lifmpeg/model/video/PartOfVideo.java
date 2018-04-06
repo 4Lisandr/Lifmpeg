@@ -4,14 +4,13 @@ import java.util.ArrayList;
 
 public class PartOfVideo {
     private static int counter = 0;
+    private final int id;
 
     private static ArrayList<PartOfVideo> allParts = new ArrayList<>();
 
-    private final int id;
+    private final TimeCode from;
+    private TimeCode to;
 
-    private final TimeCode start;
-
-    private TimeCode end;
     private String name = "";
     private boolean isRemain = true;
 
@@ -19,34 +18,34 @@ public class PartOfVideo {
 
     /**
      * 
-     * @param start
+     * @param from
      */
-    public PartOfVideo(TimeCode start) {
+    public PartOfVideo(TimeCode from) {
         id = counter++;
         setDefaultName();
-        this.start = start;
+        this.from = from;
         allParts.add(this);
     }
 
     // not all parts of videos remains
-    public PartOfVideo(TimeCode start, boolean isRemain) {
-        this(start);
+    public PartOfVideo(TimeCode from, boolean isRemain) {
+        this(from);
         this.isRemain = false;
     }
 
-    public PartOfVideo(TimeCode start, TimeCode end, boolean isRemain) {
-        this(start, isRemain);
-        this.end = end;
+    public PartOfVideo(TimeCode from, TimeCode to, boolean isRemain) {
+        this(from, isRemain);
+        this.to = to;
     }
 
-    public PartOfVideo(String name, TimeCode start) {
-        this(start);
+    public PartOfVideo(String name, TimeCode from) {
+        this(from);
         this.name = name;
     }
 
-    public PartOfVideo(String name, TimeCode start, TimeCode end) {
-        this(name, start);
-        this.end = end;
+    public PartOfVideo(String name, TimeCode from, TimeCode to) {
+        this(name, from);
+        this.to = to;
     }
 
     /*
@@ -60,7 +59,7 @@ public class PartOfVideo {
 
         for (int i = 1; i < allParts.size(); i++) {
             PartOfVideo current = allParts.get(i);
-            previousPart.setEnd(current.getStart());
+            previousPart.setTo(current.getFrom());
             previousPart = current;
         }
 
@@ -76,16 +75,16 @@ public class PartOfVideo {
         this.name = name;
     }
 
-    public void setEnd(TimeCode end) {
-        this.end = end;
+    public void setTo(TimeCode to) {
+        this.to = to;
     }
 
-    public TimeCode getStart() {
-        return start;
+    public TimeCode getFrom() {
+        return from;
     }
 
-    public TimeCode getEnd() {
-        return end;
+    public TimeCode getTo() {
+        return to;
     }
 
 }
