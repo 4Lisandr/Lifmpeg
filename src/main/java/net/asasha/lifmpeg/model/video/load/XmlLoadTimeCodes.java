@@ -1,6 +1,5 @@
 package net.asasha.lifmpeg.model.video.load;
 
-import net.asasha.lifmpeg.model.video.TimeCode;
 import net.asasha.lifmpeg.model.video.TimeLine;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -11,7 +10,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class XmlLoadTimeCodes {
 
@@ -27,7 +25,6 @@ public class XmlLoadTimeCodes {
         TimeLine timeLine = new TimeLine(duration, timebase);
 
         NodeList list = document.getElementsByTagName("in");
-        ArrayList<TimeCode> codes = new ArrayList<TimeCode>();
 
         for (int i = 0; i < list.getLength() ; i++) {
             int frame = tagToInt(document, "in", i);
@@ -35,8 +32,9 @@ public class XmlLoadTimeCodes {
                 timeLine.addTimeCode(frame);
             }
         }
-        System.out.println(duration+"\t "+timebase);
         timeLine.printTimeCodes();
+        System.out.println("================");
+        timeLine.printPartsOfVideo();
     }
 
     private int tagToInt(Document document, String tagname, int index) {
@@ -46,7 +44,7 @@ public class XmlLoadTimeCodes {
 
     public static void main(String[] args) {
         try {
-            new XmlLoadTimeCodes("a:\\1_INBOX\\exceptions.xml");
+            new XmlLoadTimeCodes("a:\\1_INBOX\\jgc.xml");
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {
