@@ -33,7 +33,7 @@ public class XmlLoadTimeCodes {
             }
         }
         timeLine.printTimeCodes();
-        System.out.println("================");
+        System.out.println((char) 27 + "[32m================ " + (char)27 + "[0m");
         timeLine.printPartsOfVideo();
     }
 

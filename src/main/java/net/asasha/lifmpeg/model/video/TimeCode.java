@@ -2,12 +2,12 @@ package net.asasha.lifmpeg.model.video;
 
 public class TimeCode implements Comparable {
 
-    public static final String FULL_FORMAT = "%02d:%02d:%02d.%03d";
-    public static final String SHORT_FORMAT = "%02d:%02d:%02d";
+    private static final String FULL_FORMAT = "%02d:%02d:%02d.%03d";
+    private static final String SHORT_FORMAT = "%02d:%02d:%02d";
 
-    public static final String COLON = ":";
-    public static final String DASH = "-";
-    public static final String SPACE = " ";
+    private static final String COLON = ":";
+    private static final String DASH = "-";
+    private static final String SPACE = " ";
 
     private final int milliSeconds;
 
@@ -62,6 +62,11 @@ public class TimeCode implements Comparable {
 
     }
 
+    public static TimeCode difference(TimeCode to, TimeCode from){
+        int diff = to.milliSeconds - from.milliSeconds;
+        return new TimeCode(diff);
+    }
+
     //00:09:28.567
     @Override
     public String toString() {
@@ -100,9 +105,8 @@ public class TimeCode implements Comparable {
             return 0;
 
         TimeCode timeCode = (TimeCode) o;
-        int result = milliSeconds - timeCode.milliSeconds;
 
-        return result;
+        return milliSeconds - timeCode.milliSeconds;
     }
 
     @Override
@@ -120,4 +124,16 @@ public class TimeCode implements Comparable {
         return milliSeconds;
     }
 
+    /**
+     * todo - calculate relative length from all parts of video,
+     * shortest and longest
+     */
+
+    public boolean isShortLength() {
+        return milliSeconds < 30000;
+    }
+
+    public boolean isLongLength() {
+        return milliSeconds > 600000;
+    }
 }
