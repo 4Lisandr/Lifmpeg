@@ -11,6 +11,7 @@ public class TimeLine {
     private int timebase = 30;
     private int duration;
     private ArrayList <TimeCode> timeCodes = new ArrayList<TimeCode>();
+    private ArrayList <PartOfVideo> parts = PartOfVideo.getAllParts();
 
 
     public TimeLine(int duration, int timebase) {
@@ -22,7 +23,13 @@ public class TimeLine {
         timeCodes.add(new TimeCode(calcMSecOfFrames(frame)));
     }
 
-    public int calcMSecOfFrames(int frame) {
+    public void doTimeLineMarkup(){
+        for (TimeCode t: timeCodes) {
+            new PartOfVideo(t);
+        }
+    }
+
+    private int calcMSecOfFrames(int frame) {
         return Math.round ((1000* frame)/ this.timebase *1f);
     }
 
@@ -31,13 +38,30 @@ public class TimeLine {
     }
 
     public void printTimeCodes(){
+        System.out.println(toString());
+    };
+
+    public void  printPartsOfVideo(){
+        doTimeLineMarkup();
+        parts = PartOfVideo.getAllParts();
+        for (PartOfVideo p:parts) {
+            p.print();
+        }
+    };
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
         for (TimeCode t:timeCodes) {
-            System.out.println(t+"\t \t"+t.toShortString());
+            sb.append(t).append("\t \t").append(t.toShortString()).append("\n");
         }
 
-        System.out.println("=== Length of video ========");
+        sb.append("=== Length of video ========").append("\n");
 
         TimeCode length = new TimeCode(calcMSecOfFrames(duration));
-        System.out.println(length.toString()+"\t \t"+length.toShortString());
+        sb.append(length.toString()).append("\t \t").append(length.toShortString());
+
+        return sb.toString();
     }
 }

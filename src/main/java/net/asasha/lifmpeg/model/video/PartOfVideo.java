@@ -17,7 +17,6 @@ public class PartOfVideo {
     //todo - private ArrayList <String> descriptionLines;
 
     /**
-     * 
      * @param from
      */
     public PartOfVideo(TimeCode from) {
@@ -66,6 +65,39 @@ public class PartOfVideo {
         return allParts;
     }
 
+    public void print() {
+        System.out.println(toString(true));
+    }
+
+    @Override
+    public String toString() {
+        return toString(false);
+    }
+
+    public String toString(boolean color) {
+        if (to == null)
+            return "";
+
+        return from.toString() + "\t" +
+                to.toString() + "\t" +
+                from.toShortString() + "\t" +
+                length(color);
+    }
+
+    private String length(boolean color) {
+        TimeCode t = TimeCode.difference(to, from);
+        String result = t.toShortString();
+        if (!color)
+            return result;
+
+//        System.out.println((char) 27 + "[31mWarning! " + (char)27 + "[0m");
+//        System.out.println((char) 27 + "[32mWarning! " + (char)27 + "[0m");
+        if (t.isSmall())
+            result = (char) 27 + "[31m"+ result + (char)27 + "[0m";
+        if (t.isBig())
+            result = (char) 27 + "[32m"+ result + (char)27 + "[0m";
+        return result;
+    }
 
     private void setDefaultName() {
         name = "Part_" + id;
