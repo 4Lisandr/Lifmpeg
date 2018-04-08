@@ -35,7 +35,6 @@ public class XMLReaderDOM {
                 frames.add(getFrame(nodeList.item(i)));
                 System.out.println(i);
             }
-            //lets print Employee list information
             for (String frame : frames) {
                 System.out.println(frame);
 //                System.out.println(Integer.parseInt(frame));

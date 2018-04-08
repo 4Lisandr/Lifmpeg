@@ -1,6 +1,11 @@
 package net.asasha.lifmpeg.model.video;
 
 
+import net.asasha.lifmpeg.model.video.load.XmlLoaderOfTimeCodes;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class TimeLine {
@@ -17,6 +22,21 @@ public class TimeLine {
     public TimeLine(int duration, int timebase) {
         this.duration = duration;
         this.timebase = timebase;
+    }
+
+    public static TimeLine loadFromXml(String fileName) throws IOException, SAXException, ParserConfigurationException {
+        XmlLoaderOfTimeCodes xml = new XmlLoaderOfTimeCodes(fileName);
+
+        TimeLine timeLine = new TimeLine(xml.getDuration(), xml.getTimebase());
+        timeLine.addAllTimeCodes(xml.getFrames());
+
+        return timeLine;
+    }
+
+    public void addAllTimeCodes(ArrayList<Integer> frames) {
+        for (int frame: frames) {
+            addTimeCode(frame);
+        }
     }
 
     public void addTimeCode(int frame) {
@@ -64,4 +84,10 @@ public class TimeLine {
 
         return sb.toString();
     }
+
+    public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
+        loadFromXml("a:\\1_INBOX\\jgc.xml").
+                printPartsOfVideo();
+    }
+
 }
