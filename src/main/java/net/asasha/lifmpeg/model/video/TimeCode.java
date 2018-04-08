@@ -62,6 +62,7 @@ public class TimeCode implements Comparable {
 
     }
 
+
     public static TimeCode difference(TimeCode to, TimeCode from){
         int diff = to.milliSeconds - from.milliSeconds;
         return new TimeCode(diff);
@@ -136,4 +137,5 @@ public class TimeCode implements Comparable {
     public boolean isLongLength() {
         return milliSeconds > 600000;
     }
+
 }
