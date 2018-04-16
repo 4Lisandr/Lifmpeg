@@ -61,11 +61,11 @@ public class TimeLine {
         System.out.println(toString());
     };
 
-    public void  printPartsOfVideo(){
+    public void  printPartsOfVideo(String format){
         doTimeLineMarkup();
         parts = PartOfVideo.getAllParts();
         for (PartOfVideo p:parts) {
-            p.print();
+            p.print(format);
         }
     };
 
@@ -86,8 +86,8 @@ public class TimeLine {
     }
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
-        loadFromXml("a:\\1_INBOX\\jgc.xml").
-                printPartsOfVideo();
+        loadFromXml("a:\\1_INBOX\\Lambda.xml").
+                printPartsOfVideo("brief");
     }
 
 }

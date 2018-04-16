@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class XmlLoaderOfTimeCodes {
+public class XmlVideoLoader {
 
     DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
     DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
@@ -20,7 +20,7 @@ public class XmlLoaderOfTimeCodes {
     private final int timebase;
     private final ArrayList<Integer> frames;
 
-    public XmlLoaderOfTimeCodes(String xmlFile) throws ParserConfigurationException, IOException, SAXException {
+    public XmlVideoLoader(String xmlFile) throws ParserConfigurationException, IOException, SAXException {
         Document document = documentBuilder.parse(new File(xmlFile));
 
         duration = tagToInt(document, "duration", 0);

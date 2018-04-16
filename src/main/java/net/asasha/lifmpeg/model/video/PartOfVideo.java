@@ -1,6 +1,7 @@
 package net.asasha.lifmpeg.model.video;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class PartOfVideo {
     private static int counter = 0;
@@ -65,23 +66,29 @@ public class PartOfVideo {
         return allParts;
     }
 
-    public void print() {
-        System.out.println(toString(true));
+    public void print(String format) {
+        System.out.println(toString(format));
     }
 
     @Override
     public String toString() {
-        return toString(false);
+        return toString("default");
     }
 
-    public String toString(boolean color) {
+    public String toString(String option) {
         if (to == null)
             return "";
 
-        return from.toString() + "\t" +
-                to.toString() + "\t" +
-                from.toShortString() + "\t" +
-                length(color);
+        boolean isColor = !Objects.equals(option, "default");
+        String length = length(isColor);
+
+        String brief = from.toShortString() + "\t" +
+                length;
+
+        return Objects.equals(option, "brief") ? brief
+                : from.toString() + "\t" +
+                to.toString() + "\t" + brief;
+
     }
 
     private String length(boolean color) {
