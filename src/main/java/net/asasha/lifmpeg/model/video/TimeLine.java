@@ -37,6 +37,7 @@ public class TimeLine {
         for (int frame: frames) {
             addTimeCode(frame);
         }
+        doTimeLineMarkup();
     }
 
     public void addTimeCode(int frame) {
@@ -62,7 +63,7 @@ public class TimeLine {
     };
 
     public void  printPartsOfVideo(String format){
-        doTimeLineMarkup();
+
         parts = PartOfVideo.getAllParts();
         for (PartOfVideo p:parts) {
             p.print(format);
@@ -86,8 +87,16 @@ public class TimeLine {
     }
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
-        loadFromXml("a:\\1_INBOX\\Lambda.xml").
-                printPartsOfVideo("brief");
+        TimeLine tl = loadFromXml("a:\\1_INBOX\\StreamAPI.xml");
+
+        tl.printPartsOfVideo("");
+
+//        System.out.println("==============");
+//        for (int i = 3; i < 17; i++) {
+//            PartOfVideo.deletePart(i);
+//            PartOfVideo.deletePart(2*i);
+//        }
+//        tl.printPartsOfVideo("");
     }
 
 }

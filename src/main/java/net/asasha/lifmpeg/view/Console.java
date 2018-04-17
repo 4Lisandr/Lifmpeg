@@ -1,29 +1,40 @@
 package net.asasha.lifmpeg.view;
 
-import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiConsole;
-
 import java.util.Scanner;
-
-import static org.fusesource.jansi.Ansi.Color.RED;
-import static org.fusesource.jansi.Ansi.ansi;
 
 public class Console implements View {
 
-    //RED
-    // System.out.println((char) 27 + "[31mWarning! " + (char)27 + "[0m");
-    //GREEN
-    //System.out.println((char) 27 + "[32mWarning! " + (char)27 + "[0m");
-    public void write(String sColor, String message) {
-        Ansi.Color color;
+    public static String colorizeString(String sColor, String message) {
+        // ANSI_PURPLE + STRING + ANSI_RESET;
+        String colorValue = AnsiColor.RESET.getColor();
         try {
-         color = Ansi.Color.valueOf(sColor);
-        } catch (Exception e){
-            write(message);
+            colorValue = AnsiColor.valueOf(sColor.toUpperCase()).getColor();
         }
-        AnsiConsole.systemInstall();
-        System.out.println(ansi().fg(RED).a(message).reset());
-        AnsiConsole.systemUninstall();
+        catch (Exception e){
+            /*NOP*/
+        }
+        return colorValue+message+AnsiColor.RESET.getColor();
+    }
+
+    public static enum AnsiColor {
+        RESET ("\u001B[0m"),
+        BLACK ("\u001B[30m"),
+        RED  ("\u001B[31m"),
+        GREEN("\u001B[32m"),
+        YELLOW("\u001B[33m"),
+        BLUE("\u001B[34m"),
+        PURPLE("\u001B[35m"),
+        CYAN("\u001B[36m"),
+        WHITE("\u001B[37m");
+
+        private final String color;
+        public String getColor() {
+            return color;
+        }
+        
+        AnsiColor(String s) {
+            this.color = s;
+        }
     }
 
     @Override
@@ -35,5 +46,9 @@ public class Console implements View {
     public String read() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
+    }
+
+    public static void main(String[] args) {
+        new Console().write(colorizeString( "green", "text"));
     }
 }
