@@ -1,4 +1,4 @@
-package net.asasha.lifmpeg.model.video;
+package net.asasha.lifmpeg.model.video.timeline;
 
 import java.util.LinkedList;
 

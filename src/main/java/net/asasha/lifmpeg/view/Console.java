@@ -4,22 +4,23 @@ import java.util.Scanner;
 
 public class Console implements View {
 
+
     public static String colorizeString(String sColor, String message) {
         // ANSI_PURPLE + STRING + ANSI_RESET;
+        String reset = AnsiColor.RESET.getColor();
         String colorValue = AnsiColor.RESET.getColor();
         try {
             colorValue = AnsiColor.valueOf(sColor.toUpperCase()).getColor();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             /*NOP*/
         }
-        return colorValue+message+AnsiColor.RESET.getColor();
+        return colorValue + message + reset;
     }
 
     public static enum AnsiColor {
-        RESET ("\u001B[0m"),
-        BLACK ("\u001B[30m"),
-        RED  ("\u001B[31m"),
+        RESET("\u001B[0m"),
+        BLACK("\u001B[30m"),
+        RED("\u001B[31m"),
         GREEN("\u001B[32m"),
         YELLOW("\u001B[33m"),
         BLUE("\u001B[34m"),
@@ -28,10 +29,11 @@ public class Console implements View {
         WHITE("\u001B[37m");
 
         private final String color;
+
         public String getColor() {
             return color;
         }
-        
+
         AnsiColor(String s) {
             this.color = s;
         }
@@ -49,6 +51,6 @@ public class Console implements View {
     }
 
     public static void main(String[] args) {
-        new Console().write(colorizeString( "green", "text"));
+        new Console().write(colorizeString("green", "text"));
     }
 }
