@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class PartOfVideo {
     private static int counter = 0;
-    private final int id;
+    public final int id;
 
     private final static ArrayList<PartOfVideo> allParts = new ArrayList<PartOfVideo>();
 
@@ -23,13 +23,17 @@ public class PartOfVideo {
 
     private String name = "";
     private boolean isRemain = true;
+    private boolean isTerminator = true;
 
-    //todo - private ArrayList <String> descriptionLines;
+    //todo - private String description;
+    // прочитать из текстового файла, если строка начинается с точки
+    //.то начало части видео является границей для порезки файла
+    //если содержит только точку - то это пауза
+    //todo - isConcatToNext
 
     /**
-     * @param from
-     * //todo создавать только недублирующийся объект
-     * проверить TimeCode from на наличие isContents во всей цепочке начиная с head
+     * @param from //todo создавать только недублирующийся объект
+     *             проверить TimeCode from на наличие isContents во всей цепочке начиная с head
      */
     public PartOfVideo(TimeCode from) {
         id = counter++;
@@ -47,6 +51,11 @@ public class PartOfVideo {
 
         tail = partOfVideo;
     }
+
+    public boolean isConcatToNext() {
+        return !(next == null || next.isTerminator);
+    }
+
 
     // not all parts of videos remains
     public PartOfVideo(TimeCode from, boolean isRemain) {
@@ -98,41 +107,36 @@ public class PartOfVideo {
         }
     }
 
-    public void print(String format) {
-        System.out.println(toString(format));
+    public void print() {
+        System.out.println(toString());
     }
 
     @Override
     public String toString() {
-        return toString("default");
-    }
-
-    public String toString(String option) {
         if (to == null)
             return "";
 
-        boolean isColor = !Objects.equals(option, "default");
-        String length = length(isColor);
+        String length = length(true);
 
         String brief = from.toShortString() + "\t" +
                 length;
         String full = id + "\t" + from.toString() + "\t" +
                 to.toString() + "\t" + brief;
 
-        return Objects.equals(option, "brief") ? brief
-                : full;
+        return Objects.equals("", "brief") ?
+                brief : full;
 
     }
 
     private String length(boolean color) {
-        TimeCode t = TimeCode.difference(to, from);
-        String result = t.toShortString();
+        TimeCode diff = TimeCode.difference(to, from);
+        String result = diff.toShortString();
         if (!color)
             return result;
 
-        if (t.isShortLength())
+        if (diff.isShortLength())
             result = Console.colorizeString("red", result);
-        if (t.isLongLength())
+        if (diff.isLongLength())
             result = Console.colorizeString("purple", result);
         return result;
     }

@@ -16,7 +16,7 @@ import java.util.List;
 
 public class XMLReaderDOM {
 
-    public static final String PATHNAME = "a:\\1_INBOX\\recursion.xml";
+    public static final String PATHNAME = "a:\\1_INBOX\\JavaNIO.xml";
 
     public static void main(String[] args) throws ParserConfigurationException {
 

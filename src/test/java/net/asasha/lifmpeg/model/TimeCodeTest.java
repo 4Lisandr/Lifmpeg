@@ -2,12 +2,17 @@ package net.asasha.lifmpeg.model;
 
 import net.asasha.lifmpeg.model.video.timeline.TimeCode;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  *
  */
 public class TimeCodeTest {
 
     public static void main(String[] args) {
+
+        Path path = Paths.get("..");
 
         TimeCode[] timeCodes = {
                 new TimeCode((int) (1000*6649/30)),
