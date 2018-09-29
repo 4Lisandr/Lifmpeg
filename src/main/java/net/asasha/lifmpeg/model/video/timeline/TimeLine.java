@@ -5,8 +5,9 @@ import net.asasha.lifmpeg.model.video.load.XmlVideoLoader;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TimeLine {
     /**
@@ -93,16 +94,30 @@ public class TimeLine {
     }
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
-        TimeLine tl = loadFromXml("a:\\1_INBOX\\JavaNIO.xml");
+
+        TimeLine tl = loadFromXml(askUser("Input path to XML file. [C:\\directories\\...\\file.xml]"));
+        List<String> descriptions = takeDescriptions(askUser("File with descriptions for video:"));
 
         tl.printPartsOfVideo();
 
-//        System.out.println("==============");
-//        for (int i = 3; i < 17; i++) {
-//            PartOfVideo.deletePart(i);
-//            PartOfVideo.deletePart(2*i);
-//        }
-//        tl.printPartsOfVideo("");
+    }
+
+    private static String askUser(String query) throws IOException {
+        BufferedReader reader = new BufferedReader (new InputStreamReader(System.in));
+        System.out.println(query);
+        return reader.readLine();
+    }
+
+    private static List<String> takeDescriptions(String filename) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(filename));
+        List<String> lines = new ArrayList<String>();
+        String line;
+        while((line = reader.readLine()) != null) {
+            lines.add(line);
+            System.out.println(line);
+        }
+        reader.close();
+        return lines;
     }
 
 }
