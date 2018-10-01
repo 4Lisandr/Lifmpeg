@@ -1,13 +1,11 @@
 package net.asasha.lifmpeg.model;
 
+import net.asasha.lifmpeg.model.video.timeline.Marker;
 import net.asasha.lifmpeg.model.video.timeline.TimeCode;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/**
- *
- */
 public class TimeCodeTest {
 
     public static void main(String[] args) {
@@ -15,15 +13,15 @@ public class TimeCodeTest {
         Path path = Paths.get("..");
 
         TimeCode[] timeCodes = {
-                new TimeCode((int) (1000*6649/30)),
-                new TimeCode(" 00:58:00.489 "),
-                new TimeCode(92345555),
-                new TimeCode(Integer.MAX_VALUE),
-                new TimeCode(" 58 45.4779 "),
-                new TimeCode(" 58- 45.367 "),
-                new TimeCode(" 45.967 "),
-                new TimeCode(" 10.567 "),
-                new TimeCode(" .567 ")
+                new Marker((int) (1000*6649/30)),
+                new Marker(" 00:58:00.489 "),
+                new Marker(92345555),
+                new Marker(Integer.MAX_VALUE),
+                new Marker(" 58 45.4779 "),
+                new Marker(" 58- 45.367 "),
+                new Marker(" 45.967 "),
+                new Marker(" 10.567 "),
+                new Marker(" .567 ")
         };
 
         for (TimeCode t: timeCodes) {

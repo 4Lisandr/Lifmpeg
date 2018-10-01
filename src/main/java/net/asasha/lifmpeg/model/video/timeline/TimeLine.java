@@ -16,7 +16,8 @@ public class TimeLine {
      */
     private int timebase = 30;
     private int duration;
-    private ArrayList<TimeCode> timeCodes = new ArrayList<TimeCode>();
+    private ArrayList<TimeCode> timeCodes = new ArrayList<>();
+    private List<String> descriptions = new ArrayList<>();;
     private ArrayList<PartOfVideo> parts = PartOfVideo.getAllParts();
 
 
@@ -36,20 +37,19 @@ public class TimeLine {
 
     public void addAllTimeCodes(ArrayList<Integer> frames) {
         for (int frame : frames) {
-            addTimeCode(frame);
+            timeCodes.add(new Marker(calcMSecOfFrames(frame)));
         }
-        doTimeLineMarkup();
     }
 
-    public void addTimeCode(int frame) {
-        timeCodes.add(new TimeCode(calcMSecOfFrames(frame)));
-    }
-
+    // фабрика частей видео
     public void doTimeLineMarkup() {
-        for (TimeCode t : timeCodes) {
-            new PartOfVideo(t);
+        for (int i = 0; i < timeCodes.size(); i++) {
+            TimeCode t = timeCodes.get(i);
+            if (descriptions.size()> i)
+                t.setDescription(descriptions.get(i));
+            new PartOfVideo((Marker) t);
         }
-    }
+}
 
     private int calcMSecOfFrames(int frame) {
         return Math.round((1000 * frame) / this.timebase * 1f);
@@ -71,8 +71,8 @@ public class TimeLine {
         System.out.println(LINE);
         System.out.println(TITLE);
         System.out.println(LINE);
-        for (PartOfVideo p : parts) {
-            p.print();
+        for (PartOfVideo part : parts) {
+            System.out.println(part);
         }
         System.out.println(LINE);
     }
@@ -87,20 +87,12 @@ public class TimeLine {
 
         sb.append("=== Length of video ========").append("\n");
 
-        TimeCode length = new TimeCode(calcMSecOfFrames(duration));
+        TimeCode length = new Marker(calcMSecOfFrames(duration));
         sb.append(length.toString()).append("\t \t").append(length.toShortString());
 
         return sb.toString();
     }
 
-    public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
-
-        TimeLine tl = loadFromXml(askUser("Input path to XML file. [C:\\directories\\...\\file.xml]"));
-        List<String> descriptions = takeDescriptions(askUser("File with descriptions for video:"));
-
-        tl.printPartsOfVideo();
-
-    }
 
     private static String askUser(String query) throws IOException {
         BufferedReader reader = new BufferedReader (new InputStreamReader(System.in));
@@ -114,10 +106,21 @@ public class TimeLine {
         String line;
         while((line = reader.readLine()) != null) {
             lines.add(line);
-            System.out.println(line);
         }
         reader.close();
         return lines;
     }
 
+    private void setDescriptions(List<String> descriptions) {
+        this.descriptions = descriptions;
+    }
+
+    public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
+
+        TimeLine tl = loadFromXml(askUser("Input path to XML file. [C:\\directories\\...\\file.xml]"));
+        tl.setDescriptions(takeDescriptions(askUser("File with descriptions for video (UTF-8):")));
+
+        tl.doTimeLineMarkup();
+        tl.printPartsOfVideo();
+    }
 }

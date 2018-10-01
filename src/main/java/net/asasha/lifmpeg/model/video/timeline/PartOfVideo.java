@@ -3,53 +3,47 @@ package net.asasha.lifmpeg.model.video.timeline;
 import net.asasha.lifmpeg.view.Console;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class PartOfVideo {
     private static int counter = 0;
     public final int id;
 
     private final static ArrayList<PartOfVideo> allParts = new ArrayList<PartOfVideo>();
+//    private int lastTerminatorIndex = 0;
 
     private final TimeCode from;
     private TimeCode to;
     /*Link to next part for extract parameter @to*/
-    private int number; //number in the list
     private PartOfVideo next;
 
-    private static int size;
-    private static PartOfVideo head = null;
-    private static PartOfVideo tail = null;
 
     private String name = "";
-    private boolean isRemain = true;
-    private boolean isTerminator = true;
+    private boolean isTerminator;
 
     //todo - private String description;
     // прочитать из текстового файла, если строка начинается с точки
     //.то начало части видео является границей для порезки файла
     //если содержит только точку - то это пауза
+    // если имя не получено - назначить "NoName"+id
     //todo - isConcatToNext
 
     /**
      * @param from //todo создавать только недублирующийся объект
-     *             проверить TimeCode from на наличие isContents во всей цепочке начиная с head
+     *             проверить TimeCodeImpl from на наличие isContents во всей цепочке начиная с head
      */
-    public PartOfVideo(TimeCode from) {
+    public PartOfVideo(Marker from) {
         id = counter++;
-        setDefaultName();
+        name = from.getDescription();
         this.from = from;
-        allParts.add(this);
-//        add(this);
-    }
 
-    private void add(PartOfVideo partOfVideo) {
-        if (tail != null) {
-            tail.next = this;
-            tail.setTo(from);
+        if (name == null || name.isEmpty()) {
+            setDefaultName();
+        } else if (name.startsWith(".")) {
+            isTerminator = true;
+            name = name.substring(1);
+//            lastTerminatorIndex = allParts.size();
         }
-
-        tail = partOfVideo;
+        allParts.add(this);
     }
 
     public boolean isConcatToNext() {
@@ -57,23 +51,12 @@ public class PartOfVideo {
     }
 
 
-    // not all parts of videos remains
-    public PartOfVideo(TimeCode from, boolean isRemain) {
-        this(from);
-        this.isRemain = false;
-    }
-
-    public PartOfVideo(TimeCode from, TimeCode to, boolean isRemain) {
-        this(from, isRemain);
-        this.to = to;
-    }
-
-    public PartOfVideo(String name, TimeCode from) {
+    public PartOfVideo(String name, Marker from) {
         this(from);
         this.name = name;
     }
 
-    public PartOfVideo(String name, TimeCode from, TimeCode to) {
+    public PartOfVideo(String name, Marker from, Marker to) {
         this(name, from);
         this.to = to;
     }
@@ -107,10 +90,6 @@ public class PartOfVideo {
         }
     }
 
-    public void print() {
-        System.out.println(toString());
-    }
-
     @Override
     public String toString() {
         if (to == null)
@@ -118,18 +97,15 @@ public class PartOfVideo {
 
         String length = length(true);
 
-        String brief = from.toShortString() + "\t" +
-                length;
-        String full = id + "\t" + from.toString() + "\t" +
-                to.toString() + "\t" + brief;
+        String brief = from.toShortString() + "\t" + length;
 
-        return Objects.equals("", "brief") ?
-                brief : full;
+        return id + "\t" + from.toString() + "\t" + to.toString() + "\t" +
+                brief + "\t" + position() + "\t" + name;
 
     }
 
     private String length(boolean color) {
-        TimeCode diff = TimeCode.difference(to, from);
+        Marker diff = Marker.difference(to, from);
         String result = diff.toShortString();
         if (!color)
             return result;
@@ -141,6 +117,26 @@ public class PartOfVideo {
         return result;
     }
 
+    private String position() {
+        return Marker.difference(from, getLastTimeCode()).toShortString();
+    }
+
+    private TimeCode getLastTimeCode() {
+        return isTerminator ?
+                from : allParts.get(lastTerminatorIndex()).from;
+    }
+
+    private int lastTerminatorIndex() {
+        for (int i = allParts.size() - 1; i >= 0; i--) {
+            PartOfVideo part = allParts.get(i);
+            //todo test of bounds id<=i
+            if (id > i && part.isTerminator) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     private void setDefaultName() {
         name = "Part_" + id;
     }
@@ -150,7 +146,7 @@ public class PartOfVideo {
     }
 
     public void setTo(TimeCode to) {
-        this.to = to;
+        this.to = (Marker) to;
     }
 
     public TimeCode getFrom() {
@@ -159,6 +155,12 @@ public class PartOfVideo {
 
     public TimeCode getTo() {
         return to;
+    }
+
+    public static void main(String[] args) {
+        String test = ".test";
+        System.out.println(test.startsWith("."));
+        System.out.println(test.startsWith("\\."));
     }
 
 }

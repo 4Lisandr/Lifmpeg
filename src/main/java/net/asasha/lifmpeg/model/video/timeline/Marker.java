@@ -14,6 +14,10 @@ public class Marker extends TimeCode {
         super(milliSeconds);
     }
 
+    public Marker(String s) {
+        super(s);
+    }
+
     public TimeCode getTimeCode() {
         return (TimeCode) this;
     }
@@ -48,5 +52,10 @@ public class Marker extends TimeCode {
 
     public boolean isEnd() {
         return isEnd;
+    }
+
+    public static Marker difference(TimeCode to, TimeCode from) {
+//        System.out.println("Calc: "+to.toShortString() +" "+ from.toShortString());
+        return new Marker(to.milliSeconds - from.milliSeconds);
     }
 }

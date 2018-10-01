@@ -1,27 +1,26 @@
 package net.asasha.lifmpeg.model.video.timeline;
 
-public class TimeCode implements Comparable {
+public abstract class TimeCode implements Comparable {
 
-    private static final String FULL_FORMAT = "%02d:%02d:%02d.%03d";
-    private static final String SHORT_FORMAT = "%02d:%02d:%02d";
+    public static final String FULL_FORMAT = "%02d:%02d:%02d.%03d";
+    static final String SHORT_FORMAT = "%02d:%02d:%02d";
 
-    private static final String COLON = ":";
-    private static final String DASH = "-";
-    private static final String SPACE = " ";
+    static final String COLON = ":";
+    static final String DASH = "-";
+    static final String SPACE = " ";
 
-    private final int milliSeconds;
-
+    public final int milliSeconds;
 
     public TimeCode(int milliSeconds) {
         this.milliSeconds = milliSeconds;
     }
+
     /**
      * Any string, contains hh:mm:ss.ms with any separator like hh-mm-ss.ms or hh mm ss.ms
      */
     public TimeCode(String timeCode) {
-        milliSeconds = timeCode.isEmpty()
-                ? 0
-                : parseCode(timeCode);
+        milliSeconds = timeCode.isEmpty() ?
+                0 : parseCode(timeCode);
     }
 
     /*
@@ -31,7 +30,7 @@ public class TimeCode implements Comparable {
     * 28.367 --> 00:00:28.367
     * .367 --> 00:00:00.367
     * */
-    private int parseCode(String timeCode) {
+    public static int parseCode(String timeCode) {
         int milliSeconds = 0;
 
         String code = timeCode.trim();
@@ -47,7 +46,7 @@ public class TimeCode implements Comparable {
 
         if (!separator.isEmpty()) {
             String[] all = code.split(separator);
-            milliSeconds = (int)(1000 * Double.parseDouble(all[all.length - 1]));
+            milliSeconds = (int) (1000 * Double.parseDouble(all[all.length - 1]));
 
             for (int i = all.length - 2, shift = 60; i >= 0; i--, shift *= 60) {
                 if (!all[i].isEmpty()) {
@@ -55,17 +54,10 @@ public class TimeCode implements Comparable {
                 }
             }
         } else {
-            milliSeconds = code.isEmpty() ? 0 : (int) (1000* Double.parseDouble(code));
+            milliSeconds = code.isEmpty() ? 0 : (int) (1000 * Double.parseDouble(code));
         }
 
         return milliSeconds;
-
-    }
-
-
-    public static TimeCode difference(TimeCode to, TimeCode from){
-        int diff = to.milliSeconds - from.milliSeconds;
-        return new TimeCode(diff);
     }
 
     //00:09:28.567
@@ -86,19 +78,20 @@ public class TimeCode implements Comparable {
                 seconds(true) % 60);
     }
 
-    private int hours(boolean round) {
+    public int hours(boolean round) {
         return minutes(round) / 60;
     }
 
-    private int minutes(boolean round) {
+    public int minutes(boolean round) {
         return seconds(round) / 60;
     }
 
-    private int seconds(boolean round) {
+    public int seconds(boolean round) {
         return round
                 ? Math.round(milliSeconds / 1000f)
                 : milliSeconds / 1000;
     }
+
 
     @Override
     public int compareTo(Object o) {
@@ -138,4 +131,5 @@ public class TimeCode implements Comparable {
         return milliSeconds > 600000;
     }
 
+    public abstract void setDescription(String description);
 }
