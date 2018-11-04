@@ -4,6 +4,8 @@ import net.asasha.lifmpeg.view.Console;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class PartOfVideo {
@@ -106,6 +108,13 @@ public class PartOfVideo {
                 .forEach(System.out::println);
     }
 
+    public static List<PartOfVideo> getTerminators() {
+        allParts.get(allParts.size() - 1).isTerminator = true;
+        return allParts.stream()
+                .filter(p -> p.isTerminator)
+                .collect(Collectors.toList());
+    }
+
     public PartOfVideo nextTerminator() {
         PartOfVideo result = next;
         while (result != null && !result.isTerminator) {
@@ -122,9 +131,15 @@ public class PartOfVideo {
 
     private static ArrayList<String> ffmpegCommands() {
         ArrayList<String> result = new ArrayList<>();
-        PartOfVideo from = allParts.get(0);
-        PartOfVideo to = from.nextTerminator();
-        result.add(from.from.toString() + " " + to.from.toString() + " " + from.name);
+        List<PartOfVideo> terminators = getTerminators();
+
+        for (int i = 0; i < terminators.size() - 1; i++) {
+            PartOfVideo from = terminators.get(i);
+            PartOfVideo to = terminators.get(i + 1);
+            result.add(from.from.toString() + " " + to.from.toString() + " " + from.name);
+        }
+
+
         return result;
     }
 
