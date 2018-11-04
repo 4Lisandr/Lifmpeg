@@ -17,8 +17,8 @@ public class TimeLine {
     private int timebase = 30;
     private int duration;
     private ArrayList<TimeCode> timeCodes = new ArrayList<>();
-    private List<String> descriptions = new ArrayList<>();;
-    private ArrayList<PartOfVideo> parts = PartOfVideo.getAllParts();
+    private List<String> descriptions = new ArrayList<>();
+    ;
 
 
     public TimeLine(int duration, int timebase) {
@@ -45,11 +45,11 @@ public class TimeLine {
     public void doTimeLineMarkup() {
         for (int i = 0; i < timeCodes.size(); i++) {
             TimeCode t = timeCodes.get(i);
-            if (descriptions.size()> i)
+            if (descriptions.size() > i)
                 t.setDescription(descriptions.get(i));
             new PartOfVideo((Marker) t);
         }
-}
+    }
 
     private int calcMSecOfFrames(int frame) {
         return Math.round((1000 * frame) / this.timebase * 1f);
@@ -66,14 +66,10 @@ public class TimeLine {
     public void printPartsOfVideo() {
         final String LINE = "----------------------------------------------------------------------------";
         final String TITLE = "Id\t    From    \t     To     \t Round  \t Length  \t Position\t Description";
+        final String HEADER = LINE + "\n" + TITLE + "\n" + LINE;
 
-        parts = PartOfVideo.getAllParts();
-        System.out.println(LINE);
-        System.out.println(TITLE);
-        System.out.println(LINE);
-        for (PartOfVideo part : parts) {
-            System.out.println(part);
-        }
+        System.out.println(HEADER);
+        PartOfVideo.getAllParts().forEach(System.out::println);
         System.out.println(LINE);
     }
 
@@ -95,7 +91,7 @@ public class TimeLine {
 
 
     private static String askUser(String query) throws IOException {
-        BufferedReader reader = new BufferedReader (new InputStreamReader(System.in));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println(query);
         return reader.readLine();
     }
@@ -104,7 +100,7 @@ public class TimeLine {
         BufferedReader reader = new BufferedReader(new FileReader(filename));
         List<String> lines = new ArrayList<String>();
         String line;
-        while((line = reader.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
             lines.add(line);
         }
         reader.close();
@@ -115,6 +111,10 @@ public class TimeLine {
         this.descriptions = descriptions;
     }
 
+    private void printFfmpegCommands() {
+
+    }
+
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
 
         TimeLine tl = loadFromXml(askUser("Input path to XML file. [C:\\directories\\...\\file.xml]"));
@@ -122,5 +122,7 @@ public class TimeLine {
 
         tl.doTimeLineMarkup();
         tl.printPartsOfVideo();
+        tl.printFfmpegCommands();
     }
+
 }

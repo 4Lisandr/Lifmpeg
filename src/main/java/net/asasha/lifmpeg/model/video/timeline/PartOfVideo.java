@@ -20,11 +20,6 @@ public class PartOfVideo {
     private String name = "";
     private boolean isTerminator;
 
-    //todo - private String description;
-    // прочитать из текстового файла, если строка начинается с точки
-    //.то начало части видео является границей для порезки файла
-    //если содержит только точку - то это пауза
-    // если имя не получено - назначить "NoName"+id
     //todo - isConcatToNext
 
     /**
@@ -35,11 +30,13 @@ public class PartOfVideo {
         id = counter++;
         name = from.getDescription();
         this.from = from;
-
         if (name == null || name.isEmpty()) {
+            // если имя не получено - назначить "NoName"+id
             setDefaultName();
         } else if (name.startsWith(".")) {
+            //начало части видео является границей для порезки файла
             isTerminator = true;
+            //если содержит только точку - то это пауза
             name = name.substring(1);
 //            lastTerminatorIndex = allParts.size();
         }
@@ -161,6 +158,7 @@ public class PartOfVideo {
         String test = ".test";
         System.out.println(test.startsWith("."));
         System.out.println(test.startsWith("\\."));
+
     }
 
 }
