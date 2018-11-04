@@ -14,5 +14,23 @@ public class CopyVideo implements Command {
         // ffmpeg -i [input_file] -vcodec copy -an [output_file]
 
         // ffmpeg -i in.mp4 -ss 00:00:03 -to 00:00:09 -c:v copy -c:a copy part1.mp4
+        //  ffmpeg -i input.flv -ss 00:00:14.435 -vframes 1 out.png
+    }
+
+    public static boolean copyVideo(String input, String start, String end, String output){
+        //Multithreading.mp4 	00:00:02.333	00:08:46.000	11.mp4
+        //ffmpeg -i %PREFIX% -ss %FROM% -to %TO% -c:v copy -c:a copy OUT\%OUT%
+
+        String fullCommand = String.format(
+                "cmd /c start /min ffmpeg -i \"%s\" -ss \"%s\" -to \"%s\" -c:v copy -c:a copy \"%s\"",
+                input, start, end, output);
+
+        System.out.println(fullCommand);
+        try {
+            Runtime.getRuntime().exec(fullCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 }

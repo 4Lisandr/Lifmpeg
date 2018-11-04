@@ -88,9 +88,7 @@ public class TimeLine {
         return lines;
     }
 
-    private void printFfmpegCommands() {
 
-    }
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
 
@@ -102,12 +100,13 @@ public class TimeLine {
         Integer[] terminators = Pattern.compile(",")
                 .splitAsStream(askUser("What parts of video are Terminators [0, 7, 13, 20 ...]\",\" coma separator"))
                 .map(String::trim)
-                .map(Integer::parseInt).toArray(Integer[]::new);
+                .map(Integer::parseInt)
+                .toArray(Integer[]::new);
 
         PartOfVideo.setTerminators((terminators));
         PartOfVideo.printTerminators();
-
-        tl.printFfmpegCommands();
+        System.out.println("----------");
+        PartOfVideo.printFfmpegCommands();
     }
 
 }

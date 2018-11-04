@@ -16,7 +16,7 @@ public class PartOfVideo {
     private final TimeCode from;
     private TimeCode to;
     /*Link to next part for extract parameter @to*/
-    private PartOfVideo next;
+    private PartOfVideo next = null;
 
 
     private String name = "";
@@ -85,6 +85,7 @@ public class PartOfVideo {
         for (int i = 1; i < allParts.size(); i++) {
             PartOfVideo current = allParts.get(i);
             previousPart.setTo(current.getFrom());
+            previousPart.next = current;
             previousPart = current;
         }
     }
@@ -100,7 +101,31 @@ public class PartOfVideo {
     }
 
     public static void printTerminators() {
-        allParts.stream().filter(p -> p.isTerminator).forEach(System.out::println);
+        allParts.stream()
+                .filter(p -> p.isTerminator)
+                .forEach(System.out::println);
+    }
+
+    public PartOfVideo nextTerminator() {
+        PartOfVideo result = next;
+        while (result != null && !result.isTerminator) {
+            result = result.next;
+        }
+        return result == null ? allParts.get(allParts.size() - 1) : result;
+    }
+
+    public static void printFfmpegCommands() {
+        //Multithreading.mp4 	00:00:02.333	00:08:46.000	11.mp4
+        //CopyVideo.copyVideo();
+        ffmpegCommands().forEach(System.out::println);
+    }
+
+    private static ArrayList<String> ffmpegCommands() {
+        ArrayList<String> result = new ArrayList<>();
+        PartOfVideo from = allParts.get(0);
+        PartOfVideo to = from.nextTerminator();
+        result.add(from.from.toString() + " " + to.from.toString() + " " + from.name);
+        return result;
     }
 
     public static void printAllParts() {

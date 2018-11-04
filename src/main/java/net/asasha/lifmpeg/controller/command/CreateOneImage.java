@@ -15,17 +15,19 @@ public class CreateOneImage implements Command {
 
     private static boolean createOneImage(String input, String time, String output) throws IOException {
         //  ffmpeg -i input.flv -ss 00:00:14.435 -vframes 1 out.png
-        String command = "cmd /c start /min ffmpeg -i \"%s\" -ss \"%s\" -vframes 1 \"%s\"";
 
-        String fullCommand = String.format(command, input, time, output);
+        String fullCommand = String.format(
+                "cmd /c start /min ffmpeg -i \"%s\" -ss \"%s\" -vframes 1 \"%s\"",
+                input, time, output);
+
         System.out.println(fullCommand);
         try {
             Runtime.getRuntime().exec(fullCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch (Exception e){e.printStackTrace();}
         return true;
     }
-
 
 
 }
