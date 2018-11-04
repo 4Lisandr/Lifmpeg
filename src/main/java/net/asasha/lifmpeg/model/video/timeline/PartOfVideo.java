@@ -3,6 +3,8 @@ package net.asasha.lifmpeg.model.video.timeline;
 import net.asasha.lifmpeg.view.Console;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class PartOfVideo {
     private static int counter = 0;
@@ -87,17 +89,40 @@ public class PartOfVideo {
         }
     }
 
+    public static void setTerminators(int... id) {
+        IntStream.of(id).filter(x -> x >= 0 && x < allParts.size())
+                .forEach(x -> allParts.get(x).isTerminator = true);
+    }
+
+    public static void setTerminators(Integer[] id) {
+        Arrays.stream(id).filter(x -> x != null && x >= 0 && x < allParts.size())
+                .forEach(x -> allParts.get(x).isTerminator = true);
+    }
+
+    public static void printTerminators() {
+        allParts.stream().filter(p -> p.isTerminator).forEach(System.out::println);
+    }
+
+    public static void printAllParts() {
+        final String LINE = "----------------------------------------------------------------------------";
+        final String TITLE = "Id\t    From    \t     To     \t Round  \t Length  \t Position\t Description";
+        final String HEADER = LINE + "\n" + TITLE + "\n" + LINE;
+
+        System.out.println(HEADER);
+        getAllParts().forEach(System.out::println);
+        System.out.println(LINE);
+    }
+
     @Override
     public String toString() {
         if (to == null)
             return "";
 
         String length = length(true);
-
         String brief = from.toShortString() + "\t" + length;
 
-        return id + "\t" + from.toString() + "\t" + to.toString() + "\t" +
-                brief + "\t" + position() + "\t" + name;
+        return String.format("%d\t%s\t%s\t%s\t%s\t%s",
+                id, from.toString(), to.toString(), brief, position(), name);
 
     }
 
@@ -160,5 +185,6 @@ public class PartOfVideo {
         System.out.println(test.startsWith("\\."));
 
     }
+
 
 }

@@ -5,9 +5,13 @@ import net.asasha.lifmpeg.model.video.load.XmlVideoLoader;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class TimeLine {
     /**
@@ -17,11 +21,9 @@ public class TimeLine {
     private int timebase = 30;
     private int duration;
     private ArrayList<TimeCode> timeCodes = new ArrayList<>();
-    private List<String> descriptions = new ArrayList<>();
-    ;
 
 
-    public TimeLine(int duration, int timebase) {
+    private TimeLine(int duration, int timebase) {
         this.duration = duration;
         this.timebase = timebase;
     }
@@ -36,13 +38,11 @@ public class TimeLine {
     }
 
     public void addAllTimeCodes(ArrayList<Integer> frames) {
-        for (int frame : frames) {
-            timeCodes.add(new Marker(calcMSecOfFrames(frame)));
-        }
+        frames.forEach(f -> timeCodes.add(new Marker(calcMSecOfFrames(f))));
     }
 
     // фабрика частей видео
-    public void doTimeLineMarkup() {
+    public void doTimeLineMarkup(List<String> descriptions) {
         for (int i = 0; i < timeCodes.size(); i++) {
             TimeCode t = timeCodes.get(i);
             if (descriptions.size() > i)
@@ -55,31 +55,12 @@ public class TimeLine {
         return Math.round((1000 * frame) / this.timebase * 1f);
     }
 
-    public ArrayList<TimeCode> getTimeCodes() {
-        return timeCodes;
-    }
-
-    public void printTimeCodes() {
-        System.out.println(toString());
-    }
-
-    public void printPartsOfVideo() {
-        final String LINE = "----------------------------------------------------------------------------";
-        final String TITLE = "Id\t    From    \t     To     \t Round  \t Length  \t Position\t Description";
-        final String HEADER = LINE + "\n" + TITLE + "\n" + LINE;
-
-        System.out.println(HEADER);
-        PartOfVideo.getAllParts().forEach(System.out::println);
-        System.out.println(LINE);
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        for (TimeCode t : timeCodes) {
-            sb.append(t).append("\t \t").append(t.toShortString()).append("\n");
-        }
+        timeCodes.forEach(t ->
+                sb.append(t).append("\t \t").append(t.toShortString()).append("\n"));
 
         sb.append("=== Length of video ========").append("\n");
 
@@ -107,10 +88,6 @@ public class TimeLine {
         return lines;
     }
 
-    private void setDescriptions(List<String> descriptions) {
-        this.descriptions = descriptions;
-    }
-
     private void printFfmpegCommands() {
 
     }
@@ -118,10 +95,18 @@ public class TimeLine {
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
 
         TimeLine tl = loadFromXml(askUser("Input path to XML file. [C:\\directories\\...\\file.xml]"));
-        tl.setDescriptions(takeDescriptions(askUser("File with descriptions for video (UTF-8):")));
+        tl.doTimeLineMarkup(takeDescriptions(askUser("File with descriptions for video (UTF-8):")));
 
-        tl.doTimeLineMarkup();
-        tl.printPartsOfVideo();
+        PartOfVideo.printAllParts();
+
+        Integer[] terminators = Pattern.compile(",")
+                .splitAsStream(askUser("What parts of video are Terminators [0, 7, 13, 20 ...]\",\" coma separator"))
+                .map(String::trim)
+                .map(Integer::parseInt).toArray(Integer[]::new);
+
+        PartOfVideo.setTerminators((terminators));
+        PartOfVideo.printTerminators();
+
         tl.printFfmpegCommands();
     }
 
