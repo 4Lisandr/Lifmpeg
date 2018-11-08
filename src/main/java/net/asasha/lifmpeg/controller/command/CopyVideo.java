@@ -27,6 +27,7 @@ public class CopyVideo implements Command {
 
         System.out.println(fullCommand);
         try {
+            Thread.sleep(4000);
             Runtime.getRuntime().exec(fullCommand);
         } catch (Exception e) {
             e.printStackTrace();

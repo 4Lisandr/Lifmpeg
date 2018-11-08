@@ -107,6 +107,11 @@ public class TimeLine {
         PartOfVideo.printTerminators();
         System.out.println("----------");
         PartOfVideo.printFfmpegCommands();
+        if (askUser("Render video?").equalsIgnoreCase("Y")) {
+            String path = askUser("Input path to video [a:\\3_WORK\\VIDEO\\Juja\\Todo\\OOPJava\\OOPJava.mp4]");
+            String pathOut = askUser("Input output folder [a:\\3_WORK\\VIDEO\\Juja\\Todo\\OOPJava\\out\\]");
+            PartOfVideo.renderFFmpegCommands(path, pathOut, ".mp4");
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package net.asasha.lifmpeg.model.video.timeline;
 
+import net.asasha.lifmpeg.controller.command.CopyVideo;
 import net.asasha.lifmpeg.view.Console;
 
 import java.util.ArrayList;
@@ -126,17 +127,33 @@ public class PartOfVideo {
     public static void printFfmpegCommands() {
         //Multithreading.mp4 	00:00:02.333	00:08:46.000	11.mp4
         //CopyVideo.copyVideo();
-        ffmpegCommands().forEach(System.out::println);
+        ffmpegCommands().forEach(c-> System.out.printf("%s %s %s%n", c[0], c[1], c[2]));
     }
 
-    private static ArrayList<String> ffmpegCommands() {
-        ArrayList<String> result = new ArrayList<>();
+    /**
+     * @param pathFile - full path to file
+     * @param pathOut - with leading slash
+     * @param type - start with . - for instance .mp4
+     */
+    public static void renderFFmpegCommands(String pathFile, String pathOut, String type) {
+        ffmpegCommands()
+                .forEach(c-> CopyVideo.copyVideo
+                        (pathFile, c[0], c[1], pathOut+c[2]+type));
+    }
+
+    /**
+     *
+     * @return List of <String[]>{from, to, name}
+     */
+    private static ArrayList<String[]> ffmpegCommands() {
+        ArrayList<String[]> result = new ArrayList<>();
         List<PartOfVideo> terminators = getTerminators();
 
         for (int i = 0; i < terminators.size() - 1; i++) {
             PartOfVideo from = terminators.get(i);
             PartOfVideo to = terminators.get(i + 1);
-            result.add(from.from.toString() + " " + to.from.toString() + " " + from.name);
+            String name = i +" "+from.name;
+            result.add(new String[]{from.from.toString(), to.from.toString(), name});
         }
 
 
