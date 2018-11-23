@@ -1,6 +1,8 @@
 package net.asasha.lifmpeg.controller.command;
 
 public class CopyVideo implements Command {
+    private static boolean inProgress = false;
+
     @Override
     public boolean canProcess(String command) {
         return false;
@@ -27,12 +29,14 @@ public class CopyVideo implements Command {
 
         System.out.println(fullCommand);
         try {
-            //todo - how long to wait
-            Thread.sleep(4000);
+            int pause = inProgress ? 4000 : 1000;
+            inProgress = true;
+            Thread.sleep(pause);
             Runtime.getRuntime().exec(fullCommand);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        inProgress = false;
         return true;
     }
 }
