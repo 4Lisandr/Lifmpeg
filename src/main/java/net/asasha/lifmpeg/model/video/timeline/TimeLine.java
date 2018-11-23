@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+//части видео лежат на монтажной линии редактора
+//нам понадобится id генератор для частей видео
+// нужно выделить фрагменты ренлеринга, содержащие части видео
+// пусть это будет Sequence - класс, содержащий непрерывную последовательность частей видео
 public class TimeLine {
     /**
      * @timebase - frame rate, default value is 30
@@ -89,10 +93,10 @@ public class TimeLine {
     }
 
 
-
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
 
-        TimeLine tl = loadFromXml(askUser("Input path to XML file. [C:\\directories\\...\\file.xml]"));
+        //todo - спросить у юзера нужен ли автодетект в дефолтной папке или задать файл вручную
+        TimeLine tl = loadFromXml(askUser("Input path to XML file. [a:\\3_WORK\\VIDEO\\Juja\\Todo\\tmp\\file.xml]"));
         tl.doTimeLineMarkup(takeDescriptions(askUser("File with descriptions for video (UTF-8):")));
 
         PartOfVideo.printAllParts();

@@ -127,7 +127,10 @@ public class PartOfVideo {
     public static void printFfmpegCommands() {
         //Multithreading.mp4 	00:00:02.333	00:08:46.000	11.mp4
         //CopyVideo.copyVideo();
-        ffmpegCommands().forEach(c-> System.out.printf("%s %s %s%n", c[0], c[1], c[2]));
+        ffmpegCommands()
+                .stream()
+                .filter(c-> !c[2].isEmpty())
+                .forEach(c-> System.out.printf("%s %s %s%n", c[0], c[1], c[2]));
     }
 
     /**
@@ -137,8 +140,12 @@ public class PartOfVideo {
      */
     public static void renderFFmpegCommands(String pathFile, String pathOut, String type) {
         ffmpegCommands()
-                .forEach(c-> CopyVideo.copyVideo
-                        (pathFile, c[0], c[1], pathOut+c[2]+type));
+                .stream()
+                .filter(c -> !c[2].isEmpty())
+                .forEach(c -> {
+                    CopyVideo.copyVideo
+                            (pathFile, c[0], c[1], pathOut + c[2] + type);
+                });
     }
 
     /**
@@ -149,10 +156,15 @@ public class PartOfVideo {
         ArrayList<String[]> result = new ArrayList<>();
         List<PartOfVideo> terminators = getTerminators();
 
+        int j = 1;
         for (int i = 0; i < terminators.size() - 1; i++) {
             PartOfVideo from = terminators.get(i);
             PartOfVideo to = terminators.get(i + 1);
-            String name = i +" "+from.name;
+            String name = from.name;
+            if (!name.isEmpty()){
+                name = String.format("%02d", j) +" "+ name;
+                j++;
+            }
             result.add(new String[]{from.from.toString(), to.from.toString(), name});
         }
 
