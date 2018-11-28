@@ -1,6 +1,6 @@
 package net.asasha.lifmpeg.model.video.timeline;
 
-public abstract class TimeCode implements Comparable {
+public class TimeCode implements Comparable {
 
     public static final String FULL_FORMAT = "%02d:%02d:%02d.%03d";
     static final String SHORT_FORMAT = "%02d:%02d:%02d";
@@ -131,5 +131,5 @@ public abstract class TimeCode implements Comparable {
         return milliSeconds > 600000;
     }
 
-    public abstract void setDescription(String description);
+    public void setDescription(String description){};
 }

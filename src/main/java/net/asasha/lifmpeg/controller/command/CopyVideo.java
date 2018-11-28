@@ -19,6 +19,7 @@ public class CopyVideo implements Command {
         //  ffmpeg -i input.flv -ss 00:00:14.435 -vframes 1 out.png
     }
 
+    //pair - io, pair - borders
     public static boolean copyVideo(String input, String start, String end, String output){
         //Multithreading.mp4 	00:00:02.333	00:08:46.000	11.mp4
         //ffmpeg -i %PREFIX% -ss %FROM% -to %TO% -c:v copy -c:a copy OUT\%OUT%
@@ -28,9 +29,9 @@ public class CopyVideo implements Command {
                 input, start, end, output);
 
         System.out.println(fullCommand);
+        int pause = inProgress ? 4000 : 1000;
+        inProgress = true;
         try {
-            int pause = inProgress ? 4000 : 1000;
-            inProgress = true;
             Thread.sleep(pause);
             Runtime.getRuntime().exec(fullCommand);
         } catch (Exception e) {

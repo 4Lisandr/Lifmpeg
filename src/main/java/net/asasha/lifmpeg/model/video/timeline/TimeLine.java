@@ -1,7 +1,7 @@
 package net.asasha.lifmpeg.model.video.timeline;
 
 
-import net.asasha.lifmpeg.model.video.load.XmlVideoLoader;
+import net.asasha.lifmpeg.model.video.XML.XmlVideoLoader;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,7 +27,7 @@ public class TimeLine {
     private ArrayList<TimeCode> timeCodes = new ArrayList<>();
 
 
-    private TimeLine(int duration, int timebase) {
+    public TimeLine(int duration, int timebase) {
         this.duration = duration;
         this.timebase = timebase;
     }
@@ -57,6 +57,14 @@ public class TimeLine {
 
     private int calcMSecOfFrames(int frame) {
         return Math.round((1000 * frame) / this.timebase * 1f);
+    }
+
+    public int calcFrameOfMSec(int mSec){
+        return Math.round(mSec*this.timebase/1000f);
+    }
+
+    public int calcFrameOfCode(String timeCode){
+        return calcFrameOfMSec(new Marker(timeCode).milliSeconds);
     }
 
     @Override
