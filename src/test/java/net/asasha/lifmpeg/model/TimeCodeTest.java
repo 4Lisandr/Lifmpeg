@@ -25,8 +25,7 @@ public class TimeCodeTest {
         };
 
         for (TimeCode t: timeCodes) {
-            System.out.println(t.toString());
-            System.out.println(t.toShortString());
+            System.out.println(t+" "+t.toShortString());
         }
 
         System.out.println(timeCodes[1].compareTo(timeCodes[2]));
