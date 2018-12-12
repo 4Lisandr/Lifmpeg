@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 //части видео лежат на монтажной линии редактора
@@ -59,6 +60,11 @@ public class TimeLine {
         return Math.round((1000 * frame) / this.timebase * 1f);
     }
 
+    public static int calcFrameOfString(String timeCode){
+        int base = 30;
+        return Math.round(TimeCode.parseCode(timeCode)* base /1000f);
+    }
+
     public int calcFrameOfMSec(int mSec){
         return Math.round(mSec*this.timebase/1000f);
     }
@@ -94,10 +100,23 @@ public class TimeLine {
         List<String> lines = new ArrayList<String>();
         String line;
         while ((line = reader.readLine()) != null) {
+            line = trimDescription(line);
             lines.add(line);
         }
         reader.close();
         return lines;
+    }
+
+    private static String trimDescription(String line) {
+        if(line.startsWith("."))
+            return line.trim();
+
+        Pattern p = Pattern.compile("\\p{L}");
+        Matcher m = p.matcher(line);
+        if (m.find()) {
+            line = line.substring(m.start());
+        }
+        return line.trim();
     }
 
 

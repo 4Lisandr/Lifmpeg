@@ -1,5 +1,6 @@
 package net.asasha.lifmpeg.model.video.XML;
 
+import net.asasha.lifmpeg.model.video.timeline.TimeLine;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,7 +14,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 public class ToXML {
-
     BufferedReader in;
     StreamResult out;
     TransformerHandler th;
@@ -27,9 +27,12 @@ public class ToXML {
             in = new BufferedReader(new FileReader("a:\\1_INBOX\\data.txt"));
             out = new StreamResult("a:\\1_INBOX\\data.xml");
             openXml();
-            String str;
-            while ((str = in.readLine()) != null) {
-                wrapMarker(str);
+            String line;
+            while ((line = in.readLine()) != null) {
+                int spaceIndex = line.indexOf(" ");
+                int frames = TimeLine.calcFrameOfString(line.substring(0, spaceIndex));
+                String name = line.substring(spaceIndex + 1).trim();
+                wrapMarker(name, String.valueOf(frames));
             }
             in.close();
             closeXml();
@@ -53,9 +56,9 @@ public class ToXML {
         startWith("sequence");
     }
 
-    public void wrapMarker(String content) throws SAXException {
+    public void wrapMarker(String name, String content) throws SAXException {
         startWith("marker");
-            emptyTag("name");
+            wrapTag("name", name);
             wrapTag("in", content);
             wrapTag("out", "-1");
             startWith("color");
